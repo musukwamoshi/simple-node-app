@@ -13,8 +13,13 @@
     "cors": "^2.8.4",
     "ejs": "^2.6.1",
     "express": "*",
+    "express-session": "^1.15.6",
     "helmet": "^3.13.0",
-    "morgan": "^1.9.0"
+    "mongodb": "^3.1.4",
+    "mongojs": "^2.6.0",
+    "mongoose": "^5.2.13",
+    "morgan": "^1.9.0",
+    "req-flash": "0.0.3"
   },
   "author": "Musukwa Moshi",
   "license": "ISC"

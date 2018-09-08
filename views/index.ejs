@@ -1,0 +1,30 @@
+<% include partials/header %>
+
+<h1> <%= title  %> </h1>
+
+      <% if (typeof deletePostSuccessMsg != 'undefined' && deletePostSuccessMsg) { %>
+             <div class="alert alert-success"><%- deletePostSuccessMsg %></div>
+     <% } else if(typeof deletePostErrorMsg != 'undefined' && deletePostErrorMsg) { %>
+             <div class="alert alert-danger"><%- deletePostErrorMsg %></div>
+     <% } %>
+
+
+     <% errors.forEach(function(error){
+
+        <% error.msg %>
+
+     <% }); %>
+
+ <ul>
+  <% clients.forEach(function(client){ %>
+
+     <%= client.fullname %>
+     <%= client.email %>
+     <%= client.phonenumber %>
+    
+  <% }); %>
+</ul> 
+
+
+
+<% include partials/footer %>
