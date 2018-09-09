@@ -2,7 +2,7 @@
 
 <h1> <%= title  %> </h1>
 
-      <% if (typeof deletePostSuccessMsg != 'undefined' && deletePostSuccessMsg) { %>
+     <% if (typeof deletePostSuccessMsg != 'undefined' && deletePostSuccessMsg) { %>
 
              <div class="alert alert-success"><%- deletePostSuccessMsg %></div>
 
@@ -13,23 +13,29 @@
      <% } %>
 
 
+
      <% errors.forEach(function(error){
 
-             <% error.msg %>
+        <% error.msg %>
 
      <% }); %>
 
-
+ 
 <div class="body">
 <div class="card-body">
-     <% typeof client != 'undefined'{ %>
 
-            <li><a> <%= client.fullname %></a> </li>
-             
-     <% } %>
+  <ul>
+     <% clients.forEach(function(client){ %>
 
+             <li>  <%= client.fullname %> </li>
+             <li>  <%= client.email %>     </li>
+             <li>  <%= client.phonenumber %> </li>
+    
+     <% }); %>
+  </ul>
 
 </div>
 </div>
+
 
 <% include partials/footer %>

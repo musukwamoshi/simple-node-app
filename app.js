@@ -173,7 +173,7 @@ app.get('/client/show/:id',function(req,res){
 
     //pull data from database
 
-    db.users.findOne({'_id': new ObjectID(req.params.id)}, function(err, doc) {
+    db.clients.findOne({'_id': new ObjectID(req.params.id)}, function(err, doc) {
     //add to a variable and pass it view
         if(err){
 
@@ -200,8 +200,6 @@ app.get('/',function(req,res){
     //res.send("Hello World.");
 
     //pull all clients from database and pass to index view for display
-
-    // find everything
         db.clients.find(function (err, docs){
              // docs is an array of all the documents in mycollection
                 res.render('index',{
@@ -239,7 +237,6 @@ app.get('/client/create',function(req,res){
 app.get('/client/edit/:id',function(req,res){
 
     //pull associated data from database and pass it to create form
-
         db.clients.findOne({'_id': new ObjectID(req.params.id)}, function(err, doc) {
 
                if(err){
@@ -267,53 +264,52 @@ app.get('/client/edit/:id',function(req,res){
 
 app.post('/client/store',function(req,res){
 
- //insert validation here
+    //insert validation here
         req.checkBody('fullname','Name is required!').notEmpty();
         req.checkBody('email','Email is required!').notEmpty();
         req.checkBody('phonenumber','Phone Number is required!').notEmpty();
 
-
         var errors=req.validationErrors();
       
         if(errors){
-
             //if errors are present redisplay form with errors
-
-            res.render('create',{
-
-                   'title':"Add Clients",
-                   'errors':errors
-            });
+                    res.render('create',{
+                       'title':"Add Clients",
+                       'errors':errors
+                    });
 
         }else{
 
             //if there are no errors ssave submitted data
-            var newClient = {
+                    var newClient = {
 
-                fullname : req.body.fullname,
-                email : req.body.email,
-                phonenumber: req.body.phonenumber
-            }
+                         fullname : req.body.fullname,
+                         email : req.body.email,
+                         phonenumber: req.body.phonenumber
+                    }
 
             //insert code to add new client to database
 
-            db.clients.save(newClient,function (err, doc){
+                    db.clients.save(newClient,function (err, doc){
              // docs is an array of all the documents in mycollection
-                if(err){
+                            if(err){
 
-                    console.log(err);
+                                 console.log(err);
+                                //redirect to home page
+                                 req.flash('storeClientSuccessMsg','Sorry there was an error accessing the database !');
+                                 res.redirect('/client/create');
 
                      
-                }else{
+                            }else{
 
-                //redirect to home page
-                    req.flash('createClientSuccessMsg', 'The Client was successfully added!');
-                    res.redirect('/');
+                                //redirect to home page
+                                 req.flash('createClientSuccessMsg','The Client was successfully added!');
+                                 res.redirect('/');
 
-                }
+                            }
 
 
-            });
+                    });
 
         }
 
@@ -331,54 +327,53 @@ app.put('/client/update/:id',function(req,res){
         var errors=req.validationErrors();
       
         if(errors){
-
             //if errors are present redisplay form with errors
 
-            res.render('create',{
+                res.render('create',{
 
                    'title':"Update Clients",
                    'errors':errors
-            });
+                });
+
 
         }else{
 
             //if there are no errors save submitted data
-
-            db.clients.update({query: {_id: mongojs.ObjectId(req.param.id)},update: {$set: {name: req.body.fullname, email: req.body.email, phonenumber: req.body.phonenumber}}},function (err, doc){
+                db.clients.update({query: {_id: mongojs.ObjectId(req.param.id)},update: {$set: {name: req.body.fullname, email: req.body.email, phonenumber: req.body.phonenumber}}},function (err, doc){
              // docs is an array of all the documents in mycollection
-                if(err){
+                    if(err){
 
-                    db.clients.findOne({'_id': new ObjectID(req.params.id)}, function(err, doc) {
+                            db.clients.findOne({'_id': new ObjectID(req.params.id)}, function(err, doc){
 
-                        if(err){
+                                if(err){
 
-                                req.flash('clientShowErrorMsg', 'Sorry there was an error pulling client details!');
-                                res.redirect('/');
+                                      req.flash('clientShowErrorMsg', 'Sorry there was an error pulling client details!');
+                                      res.redirect('/');
 
-                        }else{
+                                }else{
 
-                                req.flash('clientUpdateErrorMsg', 'Sorry there was an error updating client details!Please try again');
-                                res.render('create',{
+                                      req.flash('clientUpdateErrorMsg', 'Sorry there was an error updating client details!Please try again');
+                                      res.render('create',{
 
-                                    'title':"Edit Client",
-                                    'client':doc
+                                         'title':"Edit Client",
+                                         'client':doc
+
+                                      }
 
                                 }
-
-                        }
-                    });
+                            });
 
                      
-                }else{
+                    }else{
 
                     //redirect to home page
-                        req.flash('updateClientSuccessMsg', 'The client details were succesfully updated!');
-                        res.redirect('/');
+                            req.flash('updateClientSuccessMsg', 'The client details were succesfully updated!');
+                            res.redirect('/');
 
-                }
+                    }
 
 
-            });
+                });
 
         }
 
@@ -388,22 +383,21 @@ app.put('/client/update/:id',function(req,res){
 app.delete('/client/delete/:id',function(req,res){
 
     //insert database delete query here
-       db.users.removeById(req.params.id, function(err, docs) {
-
+        db.clients.removeById(req.params.id, function(err, docs) {
              //res.send("Hello World.");
-             if(err){
+                if(err){
 
-                   req.flash('deleteClientErrorMsg', 'There was an error deleting the client!');
-                   res.redirect('/'); 
+                     req.flash('deleteClientErrorMsg', 'There was an error deleting the client!');
+                     res.redirect('/'); 
 
-             }else{
+                }else{
 
-                   req.flash('deleteClientSuccessMsg', 'The Client was successfully deleted!');
-                   res.redirect('/');
+                     req.flash('deleteClientSuccessMsg', 'The Client was successfully deleted!');
+                     res.redirect('/');
 
-              }
+                }
 
-       });
+        });
 
 });
 
